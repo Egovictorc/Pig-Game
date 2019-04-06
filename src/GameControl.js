@@ -11,7 +11,9 @@ function GameControl(props) {
             </div>
 
             <p onClick={props.handleClick}>roll dice</p>
-            <p className="score__hold"> Hold </p>
+
+            <p id="holdContr" className="score__hold" onClick={props.handleHold}> Hold </p>
+
             <p className="score__final">final score</p>
         </div>
     )
