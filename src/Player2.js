@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 function Player2(props) {
     return(
         <div id="Player2" className="Player Player__2" >
-            <p className="name"> {props.Name} </p>
+            <p id="playerName2" className="name"> {props.Name} </p>
             <p id="scoreHold2" className="score score__temp"> {props.hold} </p>
 
             <div className="score score__perm">

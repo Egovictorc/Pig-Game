@@ -32,26 +32,26 @@ class GameController extends Component {
         let initial1 = Math.floor(Math.random() * 6) + 1;
         let initial2 = Math.floor(Math.random() * 6) + 1;
         
-        if( (this.state.dice__1 === this.state.dice__2) && (this.state.isActive1 === true) ) {      active1.classList.toggle('active');
-        active2.classList.toggle('active')
+        if( (initial1 === initial2) && (this.state.isActive1 === true) ) {    
+            dice__item.style.visibility = "hidden";  active1.classList.toggle('active');
+            active2.classList.toggle('active')
 
         this.setState( (prevState) => ({
-            value1: 0,
-            value2: initial1 + initial2,
             isActive1: !prevState.isActive1,
             isActive2: !prevState.isActive2,
-            
+            value1: 0,
+            value2: initial1 + initial2,          
         }))
         } else if( 
-            (this.state.dice__1 === this.state.dice__2) && (this.state.isActive2 === true) ) {
+            (initial1 === initial2) && (this.state.isActive2 === true) ) {
+                dice__item.style.visibility = "hidden"; 
                 active1.classList.toggle('active');
                 active2.classList.toggle('active')
         this.setState( (prevState) => ({
-            value1: initial1 + initial2,
-            value2: 0,
             isActive1: !prevState.isActive1,
             isActive2: !prevState.isActive2,
-            
+            value1: initial1 + initial2,
+            value2: 0,
         }))
         }
 
@@ -79,10 +79,10 @@ class GameController extends Component {
             })
         )
         
-
-
-       let x = this.state.value1;
-        console.log(x)
+       let x = initial1;
+       let y = initial2;
+        console.log(x , y)
+        
     }
 
     handleHold() {
@@ -104,8 +104,7 @@ class GameController extends Component {
                 value2: 0,
                 scoreHold1: prevState.scoreHold1 + prevState.value1,
                 isActive1: !prevState.isActive1,
-                isActive2: !prevState.isActive2
-                
+                isActive2: !prevState.isActive2           
             }))
         } else {
             active1.classList.toggle('active');
@@ -117,21 +116,19 @@ class GameController extends Component {
                 value2: 0,
                 scoreHold2: prevState.scoreHold2 + prevState.value2,
                 isActive1: !prevState.isActive1,
-                isActive2: !prevState.isActive2,
-                
+                isActive2: !prevState.isActive2,        
             }))
         }
     }
 
-    render(){
-        
+    render(){ 
         return(
             <>
             <GameControl dice__1={this.state.dice__1} dice__2={this.state.dice__2} handleClick={ this.handleClick } handleHold={this.handleHold} />
 
-            <Player1 Name="Player 1" hold={this.state.scoreHold1} value1={this.state.value1} scoreCur={(this.state.value1) } />
+            <Player1 Name={this.state.scoreHold1 >= 100? 'WINNER': "Player 1"} hold={this.state.scoreHold1} value1={this.state.value1} scoreCur={(this.state.isActive1 === true) ?(this.state.value1) : 0 } />
 
-            <Player2 Name="Player 2" hold={this.state.scoreHold2} value2={this.state.value2} scoreCur={(this.state.value2)} />
+            <Player2 Name={this.state.scoreHold2 >= 100? 'WINNER': "Player 2"} hold={this.state.scoreHold2} value2={this.state.value2} scoreCur={ (this.state.isActive2 === true) ? (this.state.value2) : 0} />
 
             </>
             
