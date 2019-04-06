@@ -1,0 +1,32 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box; 
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --color-primary: rgb(221, 56, 56);
+    --font-big: 8rem;
+    --font-medium: 4rem; 
+    --font-small: 2rem;
+    --font-xsmall: 1.6rem;
+    --shadow-box: .1rem .1rem 2rem #eee;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    height: 100vh;
+    line-height: 1.6;
+    background-image: linear-gradient(to bottom right, rgba(216, 195, 195, 0.24), 
+    rgba(214, 110, 110, 0.1)),
+    url('../back.jpg');
+    background-repeat: no-repeat;
+    color: #555;
+
+    font-family: Arial, sans-serif;
+}

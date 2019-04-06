@@ -1,28 +1,18 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
+import './css/Index.css';
+import Back from './back.jpg';
+import GameControl from './GameControl';
+import Player1 from './Player1';
+import Player2 from './Player2';
+import GameController from './GameController';
 
-class App extends Component {
-  render() {
+function App(props) {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+        <div className="container">
+            <GameController />
+            
+        </div>
+    )
 }
 
 export default App;
