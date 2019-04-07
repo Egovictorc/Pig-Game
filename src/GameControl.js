@@ -14,7 +14,7 @@ function GameControl(props) {
 
             <p id="holdContr" className="score__hold" onClick={props.handleHold}> Hold </p>
 
-            <input type="text" placeHolder="Final score"  className="score__final" />
+            <input type="text" placeholder="Final score"  className="score__final" />
         </div>
     )
 }
