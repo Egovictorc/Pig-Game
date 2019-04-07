@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
 import GameControl from './GameControl';
-import Player1 from './Player1';
+/*import Player1 from './Player1';
 import Player2 from './Player2';
+*/
+
+
+const Player1 = React.lazy( () => import('./Player1'))
+const Player2 = React.lazy( () => import('./Player2') )
 
 class GameController extends Component {
     constructor() {
@@ -21,6 +26,7 @@ class GameController extends Component {
 
         this.handleClick = this.handleClick.bind(this);
         this.handleHold = this.handleHold.bind(this); 
+        this.restartGame = this.restartGame.bind(this);
     }
 
     handleClick() {
@@ -86,12 +92,8 @@ class GameController extends Component {
     }
 
     handleHold() {
-        let scoreHold1 = document.getElementById('scoreHold1');
-        let scoreHold2 = document.getElementById('scoreHold2');
         let active1 = document.getElementById('Player1');
         let active2 = document.getElementById('Player2');
-        let initial1 = Math.floor(Math.random() * 6) + 1;
-        let initial2 = Math.floor(Math.random() * 6) + 1;
         let hideImage = document.getElementById('dice');
         hideImage.style.visibility = "hidden";
 
@@ -121,15 +123,45 @@ class GameController extends Component {
         }
     }
 
+    restartGame() {
+        // reset all state attributes back to zero
+        this.setState({
+            value1: 0,
+            value2: 0,
+            scoreHold1: 0,
+            scoreHold2: 0,
+            isActive1: true,
+            isActive2: false,
+        })
+        let active1 = document.getElementById('Player1');
+        let active2 = document.getElementById('Player2');
+        if(!active1.classList.contains('active')) {
+            active1.classList.add('active');
+            active2.classList.toggle('active');
+        }
+    }
+
+    componentDidMount() {
+       
+    }
+
+    componentWillUnmount(){
+       
+    }
+   
+
     render(){ 
+   
         return(
             <>
-            <GameControl dice__1={this.state.dice__1} dice__2={this.state.dice__2} handleClick={ this.handleClick } handleHold={this.handleHold} />
+            <GameControl dice__1={this.state.dice__1} dice__2={this.state.dice__2} handleNewGame={this.restartGame} handleClick={ this.handleClick } handleHold={this.handleHold} />
 
+            <React.Suspense fallback={ <div> loading...</div>} >
             <Player1 Name={this.state.scoreHold1 >= 100? 'WINNER': "Player 1"} hold={this.state.scoreHold1} value1={this.state.value1} scoreCur={(this.state.isActive1 === true) ?(this.state.value1) : 0 } />
-
+            
+            
             <Player2 Name={this.state.scoreHold2 >= 100? 'WINNER': "Player 2"} hold={this.state.scoreHold2} value2={this.state.value2} scoreCur={ (this.state.isActive2 === true) ? (this.state.value2) : 0} />
-
+            </React.Suspense>
             </>
             
         )
