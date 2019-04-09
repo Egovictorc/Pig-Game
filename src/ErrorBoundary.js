@@ -8,7 +8,7 @@ class ErrorBoundary extends React.Component {
         }
     }
 
-    getDerivedStateFromError() {
+    static getDerivedStateFromError(error) {
         return {hasError: true}
     }
 
@@ -24,7 +24,7 @@ class ErrorBoundary extends React.Component {
         }
 
         return(
-            <h2> Everything is allright</h2>
+            this.props.children
         )
     }
 }

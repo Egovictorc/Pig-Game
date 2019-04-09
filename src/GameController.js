@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import GameControl from './GameControl';
+import ErrorBoundary from './ErrorBoundary';
 /*import Player1 from './Player1';
 import Player2 from './Player2';
 */
@@ -24,11 +25,16 @@ class GameController extends Component {
             scoreHold2: 0,
             name1: 'Player 1',
             name2: 'Player 2',
+            finalScore: 100,
         }
 
         this.handleClick = this.handleClick.bind(this);
         this.handleHold = this.handleHold.bind(this); 
         this.restartGame = this.restartGame.bind(this);
+        this.handleChange = this.handleChange.bind(this)
+        this.handleKeyPress = this.handleKeyPress.bind(this)
+
+        this.inputRef = React.createRef();
     }
 
     handleClick() {
@@ -39,11 +45,12 @@ class GameController extends Component {
         
         let initial1 = Math.floor(Math.random() * 6) + 1;
         let initial2 = Math.floor(Math.random() * 6) + 1;
-        /*let isGamePlaying = this.state.scoreHold1 < 100 || this.state.scoreHold2 < 100 ? true : false; 
+        /*let isGamePlaying = this.state.scoreHold1 < this.state.finalScore || this.state.scoreHold2 < this.state.finalScore ? true : false; 
         */
-             
+        
          if( (initial1 === initial2) && (this.state.isActive1 === true) ) {    
-            dice__item.style.visibility = "hidden";  
+             //hide dice when both dice have equal value
+                /*dice__item.style.visibility = "hidden"; */
             active1.classList.toggle('active');
             active2.classList.toggle('active')
 
@@ -56,7 +63,8 @@ class GameController extends Component {
         } // Check for matching / equal dice value on Player 2 
         else if( 
             (initial1 === initial2) && (this.state.isActive2 === true) ) {
-                dice__item.style.visibility = "hidden"; 
+                //hide dice when both dice have equal value
+                /*dice__item.style.visibility = "hidden"; */
                 active1.classList.toggle('active');
                 active2.classList.toggle('active')
             this.setState( (prevState) => ({
@@ -66,7 +74,7 @@ class GameController extends Component {
                 value2: 0,
             }))
         }
-
+        
         if(this.state.isActive1 === true) {
             this.setState(
                 (prevState) => ({
@@ -105,7 +113,7 @@ class GameController extends Component {
         
         /*let scoreHold1 = this.state.scoreHold1 + this.state.value1;
         let scoreHold2 = this.state.scoreHold2 + this.state.value2;
-        let isGamePlaying = this.state.scoreHold1 < 100 || this.state.scoreHold2 < 100 ? true : false; 
+        let isGamePlaying = this.state.scoreHold1 < this.state.finalScore || this.state.scoreHold2 < this.state.finalScore ? true : false; 
         */
         if(
             this.state.isActive1 === true) {
@@ -143,6 +151,9 @@ class GameController extends Component {
             scoreHold2: 0,
             isActive1: true,
             isActive2: false,
+            name1: prompt('Please enter Player 1 name:', 'Computer') || this.state.name1,
+            name2: prompt('Please enter Player 2 name:', 'Computer') || this.state.name2,
+            finalScore: 100,
         })
         let active1 = document.getElementById('Player1');
         let active2 = document.getElementById('Player2');
@@ -152,12 +163,31 @@ class GameController extends Component {
         }
     }
 
+    //final Score
+    
+    handleChange() {
+     /*   this.setState({
+            finalScore: this.inputRef.current.value,
+        })
+        */
+        
+    }
+
+    handleKeyPress(event) {
+        if(event.which == 13) {
+            this.setState({
+                finalScore: this.inputRef.current.value,
+        }) }
+        console.log(this.state.finalScore)   
+        console.log(typeof (event.which))   
+    }
+
     componentDidMount() {
         // Game Instructions
         alert(`
         README: Instruction for the Game
         1. This game can be played by only 2 individuals at a time
-        2. First player to get 100 points from dice win the game
+        2. First player to get this.state.finalScore points from dice win the game
         3. The current player loses his current score if both dice display equal value
         4. Remember to hold your score
         5. Please enter players name on the next dialog box`
@@ -172,29 +202,66 @@ class GameController extends Component {
     }
 
     componentWillUnmount(){
-        this.setState({
-            name1: 'Player 1',
-            name2: 'Player 2',
-        })
+        
     }
 
     shouldComponentUpdate(nextProps, nextStates) {     
-        return ( ( this.state.scoreHold1 < 100 && this.state.scoreHold2 < 100) ? true: false )
+        if (nextStates.scoreHold1 > this.state.finalScore || nextStates.scoreHold2 > this.state.finalScore ) {
+            let active1 = document.getElementById('Player1');
+        let active2 = document.getElementById('Player2');
+        active1.classList.remove('active');
+        active2.classList.remove('active');
+        let dice__item = document.getElementById('dice');
+        dice__item.style.visibility = "hidden";
+        }
+        return ( ( this.state.scoreHold1 < this.state.finalScore && this.state.scoreHold2 < this.state.finalScore) ? true: false )
+
     }
     
-    render(){ 
-   
-        return(
-            <>
-            <GameControl dice__1={this.state.dice__1} dice__2={this.state.dice__2} handleNewGame={this.restartGame} handleClick={ this.handleClick } handleHold={this.handleHold} />
+    componentDidUpdate(prevProps, prevState, snapShot) {
+        //console.log(prevState.finalScore)
+        //console.log(this.props)
+    }
 
-            <React.Suspense fallback={ <div> loading... players!!! Please enter player names </div>} >
-            <Player1 Name={this.state.scoreHold1 >= 100? 'WINNER': this.state.name1} hold={this.state.scoreHold1} value1={this.state.value1} scoreCur={(this.state.isActive1 === true) ?(this.state.value1) : 0 } />
-            
-            
-            <Player2 Name={this.state.scoreHold2 >= 100? 'WINNER': this.state.name2} hold={this.state.scoreHold2} value2={this.state.value2} scoreCur={ (this.state.isActive2 === true) ? (this.state.value2) : 0} />
-            </React.Suspense>
-            </>
+
+    render() { 
+        const control = {
+            dice__1: this.state.dice__1,
+            dice__2: this.state.dice__2,
+            handleNewGame: this.restartGame,
+            handleClick:  this.handleClick ,
+            handleHold: this.handleHold,
+            handleChange: this.handleChange,
+            inputRef: this.inputRef,
+            keyPress: this.handleKeyPress,             
+        }
+
+        const player1 = {
+            Name: this.state.scoreHold1 >= this.state.finalScore ? 'WINNER': this.state.name1, 
+            hold: this.state.scoreHold1,
+            value1: this.state.value1, 
+            scoreCur: (this.state.isActive1 === true) ?(this.state.value1) : 0 , 
+        }
+
+        const player2 = {
+            Name: (this.state.scoreHold2 >= this.state.finalScore? 'WINNER': this.state.name2), 
+            hold: this.state.scoreHold2, 
+            value2: this.state.value2, 
+            scoreCur:  (this.state.isActive2 === true) ? (this.state.value2) : 0, 
+        }
+
+        const fallback = <div> loading... players!!! Please enter player names </div>         
+        
+        return(
+            <ErrorBoundary>
+                <GameControl {...control} />
+
+                <React.Suspense fallback={fallback} >
+                    <Player1 {...player1} />    
+                    
+                    <Player2 {...player2} />
+                </React.Suspense>
+            </ErrorBoundary>
             
         )
     }
