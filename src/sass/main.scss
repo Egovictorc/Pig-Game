@@ -73,13 +73,25 @@
 
 .active {
     background-color: #c1c1c1;
+    position: relative;
     
     &__name {
         display: flex;
         align-items: center;
-
     }
+        &::before {
+            position: absolute;
+            top: 5rem;
+            right: 50%;
+            content: "";
+            width:1.7rem;
+            height: 1.7rem;
+            border-radius: 50%;
+            display: inline-block;
+            background-color: var(--color-primary);
+        }
     
+    /*
     &__circle {
         width:1.7rem;
         height: 1.7rem;
@@ -87,6 +99,7 @@
         display: inline-block;
         background-color: var(--color-primary);
     }
+    */
 }
 
 h1, h2, h3, h4, h5, h6 {

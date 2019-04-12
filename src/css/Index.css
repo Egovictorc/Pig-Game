@@ -125,7 +125,7 @@ p:hover {
   text-align: center;
 }
 .score__current {
-  color: #333;
+  color: #777;
   text-transform: uppercase;
   font-size: var(--font-xsmall);
 }
@@ -136,12 +136,26 @@ p:hover {
 
 .active {
   background-color: #c1c1c1;
+  position: relative;
+  /*
+  &__circle {
+      width:1.7rem;
+      height: 1.7rem;
+      border-radius: 50%;
+      display: inline-block;
+      background-color: var(--color-primary);
+  }
+  */
 }
 .active__name {
   display: flex;
   align-items: center;
 }
-.active__circle {
+.active::before {
+  position: absolute;
+  top: 5rem;
+  right: 50%;
+  content: "";
   width: 1.7rem;
   height: 1.7rem;
   border-radius: 50%;

@@ -220,7 +220,7 @@ class GameController extends Component {
     
     componentDidUpdate(prevProps, prevState, snapShot) {
         //console.log(prevState.finalScore)
-        //console.log(this.props)
+        console.log(this.state.finalScore)
     }
 
 
